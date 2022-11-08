@@ -1,0 +1,2 @@
+1. All log file data should be encrypted & stored within a .png
+2. Program should only run if there is an active connection to any item within DOMAIN_LIST
