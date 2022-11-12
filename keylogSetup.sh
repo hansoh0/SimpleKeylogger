@@ -1,6 +1,8 @@
 #! /bin/bash
 
 echo -e "Process Starting\n"
+apt-get install coreutils -y &> /dev/null &
+echo -e "Shred installed."
 apt-get install python3 -y &> /dev/null &
 echo -e "Python3 installed."
 apt-get install pip -y &> /dev/null &
