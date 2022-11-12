@@ -7,29 +7,13 @@ import os
 
 # Globals
 # Control Vars
-lst2 = []
 fullstr = []
 wLine = ""
 F = '0'
-# Headers
-fC = "[FILE CREATED]: "
-fR = "[FILE REMOVED]: "
-dC = "[DIRECTORY CREATED]: "
-dR = "[DIRECTORY REMOVED]: "
-ChD = "[CHANGED DIRECTORY]: "
 # Directories
 home = str(os.path.expanduser('~'))
-haum = (home+"/.config/choom")
-sett = (haum+"/Settings")
-logs = (haum+"/.Logs")
-conf = (home+"/.config")
 # Files
 lgPath = (home+"/Desktop/test.log")
-# Location Tests
-haumE = os.path.exists(haum)
-settE = os.path.exists(sett)
-logsE = os.path.exists(logs)
-confE = (conf)
 # End Globals
 
 # Class controls what keys are pressed on the keyboard
@@ -176,10 +160,8 @@ class LogControl:
 		else:
 			print ("Incorrect logIO option given in initializeLog()\nlogIO can only be 1 (start) 0 (stop) -1 (destroy) 2 (build).\n")
 			exit(1)
-
-##	
+	
 ## Main Function
-##
 def __main__():
 	if os.path.exists(lgPath) == True:
 		LogControl.initializeLog(1, lgPath)
