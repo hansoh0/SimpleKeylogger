@@ -6,7 +6,6 @@ import datetime
 import os
 
 # Globals
-# Control Vars
 fullstr = []
 wLine = ""
 F = '0'
