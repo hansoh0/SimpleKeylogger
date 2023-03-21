@@ -10,7 +10,7 @@ Be sure to modify the path of the logfile.
 Install requirements with bash
 
 ```
-sudo ./setup.sh
+./setup.sh
 
 ```
     
