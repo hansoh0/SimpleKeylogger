@@ -7,10 +7,10 @@ Be sure to modify the path of the logfile.
 
 ## Installation
 
-Install requirements with pip
+Install requirements with bash
 
 ```
-pip install -r requirements.txt
+sudo ./setup.sh
 
 ```
     
