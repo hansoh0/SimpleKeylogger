@@ -11,6 +11,5 @@ Install requirements with bash
 
 ```
 ./setup.sh
-
 ```
     
