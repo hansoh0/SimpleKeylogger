@@ -45,5 +45,5 @@ hansoho@hansoho.co:~$ crontab -e
 
 @reboot nohup /usr/bin/python3 /path/to/simpleKeylog.py &
 ```
-
+Haven't tested on windows, GLHF
 
