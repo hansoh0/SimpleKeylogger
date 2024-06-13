@@ -16,7 +16,7 @@ hansoho@hansoho.co:~$ pip install -r requirements.txt
 
 ## Execution Methods
 You can run it as a service or cronjob
-# Service
+### Service
 ```
 hansoho@hansoho.co:~$ sudo vi /etc/systemd/system/keylog.service
 
@@ -39,7 +39,7 @@ hansoho@hansoho.co:~$ sudo systemctl daemon-reload
 hansoho@hansoho.co:~$ sudo systemctl enable keylog.service
 hansoho@hansoho.co:~$ sudo systemctl start keylog.service
 ```
-# Crontab
+### Crontab
 ```
 hansoho@hansoho.co:~$ crontab -e
 
