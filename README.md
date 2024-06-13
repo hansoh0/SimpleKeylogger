@@ -1,6 +1,6 @@
 # SimpleKeylogger
 
-A linux keylogger written by @saucecan (https://www.github.com/saucecan).
+A linux keylogger written by @hansoh0 (https://www.github.com/hansoh0).
 This program should be run with elevated privileges and can be ran as a chron job or daemon to capture keystrokes.
 Be sure to modify the path of the logfile.
 
@@ -45,5 +45,7 @@ hansoho@hansoho.co:~$ crontab -e
 
 @reboot nohup /usr/bin/python3 /path/to/simpleKeylog.py &
 ```
+if you dont change the lgPath variable, it will save the log to the Desktop 👍
+
 Haven't tested on windows, GLHF
 
